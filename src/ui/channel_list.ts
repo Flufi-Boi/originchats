@@ -2,7 +2,6 @@ import * as events from "../events";
 import * as state from "./state";
 import * as rotur from "../net/rotur";
 import { generateIcon } from "./icon";
-import { servers } from "../server";
 
 export type ChannelListItem = {
     type: "text",

@@ -8,6 +8,10 @@ import * as right_click from "./right_click";
 import * as reply_bar from "./reply_bar";
 import * as emoji_bar from "./emoji_bar";
 
+right_click;
+reply_bar;
+emoji_bar;
+
 export function generate() {
     server_list.generate();
     channel_list.generate();
