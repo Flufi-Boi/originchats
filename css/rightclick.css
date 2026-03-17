@@ -1,0 +1,54 @@
+
+#right-click {
+    position: fixed;
+    left: 0;
+    top: 0;
+
+    background-color: var(--prim);
+    border: 1px solid var(--prim-light);
+    border-radius: 15px;
+    border-top-left-radius: 0;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    display: flex;
+    flex-direction: column;
+
+    > button {
+        border: none;
+        background-color: transparent;
+
+        display: flex;
+        gap: 7.5px;
+        padding: 10px;
+
+        font-size: 15px;
+        color: var(--text);
+        font-family: "Noto Sans";
+        text-wrap: nowrap;
+
+        cursor: pointer;
+
+        > icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        transition: background-color .1s;
+    }
+    > button:not(:last-child) {
+        border-bottom: 1px solid var(--prim-light);
+    }
+    > button:hover {
+        background-color: var(--prim-light);
+    }
+
+    > hr {
+        width: 100%;
+        margin: 0;
+
+        border: none;
+        border-top: 2px solid var(--seco);
+    }
+}

@@ -1,0 +1,111 @@
+
+.message {
+    padding: 5px;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+
+    background-color: transparent;
+
+    > .reply {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+
+        padding-left: 16px;
+        padding-bottom: 10px;
+
+        > icon {
+            margin-top: 5px;
+            margin-bottom: -3px;
+
+            color: var(--tert);
+        }
+
+        > img {
+            user-select: none;
+            width: 20px;
+            border-radius: 100%;
+        }
+
+        > .user {
+            font-weight: bold;
+            font-size: var(--text-size-user);
+            user-select: none;
+        }
+
+        > .content {
+            max-width: 400px;
+            text-wrap-mode: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+    }
+
+    > .container {
+        position: relative;
+        display: flex;
+
+        > .pfp {
+            position: absolute;
+
+            min-width: 40px;
+            user-select: none;
+            > img {
+                width: 40px;
+                border-radius: 100%;
+            }
+        }
+
+        > .column {
+            margin-left: 50px;
+            > .user {
+                margin-top: -2px;
+                margin-bottom: 1px;
+                font-weight: bold;
+                user-select: none;
+            }
+            > .content {
+                white-space: pre;
+                text-wrap: wrap;
+                user-select: text;
+            
+                > .spotify-embed {
+                    margin-top: 5px;
+                    display: flex;
+                }
+            }
+            > .content.emoji-only {
+                padding-top: 3px;
+                > p {
+                    > .emoji-container {
+                        > .emoji {
+                            width: 50px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    transition: background-color .1s ease-out;
+}
+.message:hover {
+    background-color: var(--back-lighter);
+}
+.message.connected {
+    margin-top: -5px;
+
+    > .container {
+        > .pfp > * {
+            display: none;
+        }
+        > .column {
+            > .user {
+                display: none;
+            }
+        }
+    }
+}
+.message:last-child {
+    margin-bottom: 0px;
+}

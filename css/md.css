@@ -1,0 +1,188 @@
+
+.md {
+    display: flex;
+    flex-direction: column;
+
+    > p {
+        margin: 0;
+        display: inline-flex;
+        align-items: center;
+
+        > bold {
+            font-weight: bold;
+        }
+        
+        > italic {
+            font-style: italic;
+        }
+        
+        > strikethrough {
+            text-decoration: line-through;
+        }
+
+        > div > img,
+        > div > video {
+            max-width: 500px;
+            max-height: 250px;
+
+            margin: 5px 0;
+            margin-left: -2px;
+
+            border: 1px solid var(--prim);
+            border-radius: 10px;
+
+            cursor: pointer;
+        }
+
+        > .emoji {
+            margin-bottom: -5px;
+        }
+
+        > .link {
+            display: inline;
+        }
+
+        > .channel-link,
+        > .ping {
+            background-color: var(--prim);
+            border: 1px solid var(--prim-light);
+            border-radius: 5px;
+            padding: 0px 2px;
+            margin: 2px 0;
+            font-size: var(--text-size-normal);
+            display: flex;
+        }
+    }
+    > p:last-child {
+        margin-bottom: 0px;
+    }
+
+    .code-block,
+    .code-block-inline {
+        background-color: var(--prim);
+        border: 1px solid var(--prim-light);
+        border-radius: 10px;
+    }
+
+    .code-block-inline {
+        margin: 2.5px;
+        padding: 6px;
+        padding-top: 4px;
+        padding-bottom: 4px;
+    }
+    .code-block {
+        position: relative;
+
+        margin: 5px 0;
+
+        > .code-content {
+            user-select: text;
+        }
+
+        > .topbar {
+            position: relative;
+            height: 30px;
+
+            display: flex;
+
+            border-bottom: 1px solid var(--prim-light);
+            
+            > span {
+                flex: 1;
+
+                padding-left: 5px;
+                align-content: center;
+
+                font-size: var(--text-size-normal);
+                user-select: none;
+            }
+
+            > button {
+                width: 30px;
+
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 0;
+
+                border: none;
+                background-color: transparent;
+                cursor: pointer;
+                
+                > icon { width: 18px }
+            }
+            > button.copy {
+                > icon { padding-left: 2px; }
+            }
+        }
+    }
+    > .alert {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        padding-left: 15px;
+        padding-top: 5px;
+        padding-bottom: 10px;
+
+        border-left: 3px solid var(--prim);
+
+        > .header {
+            display: flex;
+            align-items: center;
+
+            margin-bottom: 10px;
+            
+            > icon {
+                margin-right: 7px;
+                width: 22px;
+            }
+            > p {
+                margin: 0;
+                font-weight: 600;
+            }
+        }
+    }
+
+    > .alert-note {
+        border-color: var(--md-alert-note);
+        .header,
+        .header > icon {
+            color: var(--md-alert-note);
+        }
+    }
+    > .alert-tip {
+        border-color: var(--md-alert-tip);
+        .header,
+        .header > icon {
+            color: var(--md-alert-tip);
+        }
+    }
+    > .alert-important {
+        border-color: var(--md-alert-important);
+        .header,
+        .header > icon {
+            color: var(--md-alert-important);
+        }
+    }
+    > .alert-warning {
+        border-color: var(--md-alert-warning);
+        .header,
+        .header > icon {
+            color: var(--md-alert-warning);
+        }
+    }
+    > .alert-caution {
+        border-color: var(--md-alert-caution);
+        .header,
+        .header > icon {
+            color: var(--md-alert-caution);
+        }
+    }
+
+    blockquote {
+        margin: 0;
+        margin-bottom: 10px;
+        padding-left: 40px;
+        
+        border-left: 2px solid var(--prim);
+    }
+}
