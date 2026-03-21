@@ -241,7 +241,7 @@ export class Server {
     convertMessage(net: NetMessage): Message {
         return {
             ...net,
-            user: this.users[net.user],
+            user: this.users[net.user] ?? { username: net.user },
             reply_to: net.reply_to != null ? {
                 id: net.reply_to.id,
                 user: this.users[net.reply_to.user],
