@@ -24,14 +24,19 @@
         > div > video {
             max-width: 500px;
             max-height: 250px;
-
-            margin: 5px 0;
             margin-left: -2px;
+
+            margin-top: 7.5px;
 
             border: 1px solid var(--prim);
             border-radius: 10px;
 
             cursor: pointer;
+        }
+
+        > div:only-child > img,
+        > div:only-child > video {
+            margin: 5px 0;
         }
 
         > .emoji {

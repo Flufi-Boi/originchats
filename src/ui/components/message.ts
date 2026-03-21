@@ -397,7 +397,7 @@ export function generateContent(text: string, main_container: HTMLElement) {
                     const at_bottom = isNearBottom(messages_container);
 
                     const isImage = type.startsWith("image/");
-                    const isVideo = type.startsWith("video/");
+                    const isVideo = type.startsWith("video/") || type =="application/octet-stream";
                     const isAudio =
                         type.startsWith("audio/") ||
                         type === "application/ogg" ||
