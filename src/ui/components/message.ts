@@ -1,4 +1,4 @@
-import { messages } from "../../message";
+import { messages, type Message } from "../../message";
 import { highlight, tokenTypeToCssClass } from "../highlighting/highlighter";
 import { generateIcon, icon_names } from "../icon";
 import { removeIndent } from '../highlighting/utils';
@@ -11,6 +11,8 @@ import * as state from "../state";
 import { getDisplayName, type User } from "../../user";
 import { ImagePopup } from "./popups/image";
 import { generateEmoji } from "./emoji";
+import type { Attachment } from "../../attachment";
+import { identifyType, formatFileSize } from '../utils';
 
 export function is_connected(id: string, last_id: string): boolean {
     let cur = messages[id];
@@ -54,41 +56,7 @@ export function generate(id: string, connected?: boolean | string | null, intera
     elem.className = "message";
 
     if (msg.reply_to) {
-        const reply = document.createElement("div");
-        reply.className = "reply";
-
-        reply.appendChild(generateIcon("corner-up-right"));
-
-        const pfp = document.createElement("img");
-        pfp.draggable = false;
-        pfp.src = `https://avatars.rotur.dev/${msg.reply_to.user.username}`;
-        reply.appendChild(pfp);
-
-        const name = document.createElement("span");
-        const name_color = getUserColor(msg.reply_to.user.username);
-        if (name_color)
-            name.style.color = name_color;
-        name.className = "user";
-        name.textContent = getDisplayName(msg.reply_to.user);
-        reply.appendChild(name);
-
-        if (messages[msg.reply_to.id]) {
-            // TODO: remove md shit :P
-            let content = messages[msg.reply_to.id].content;
-            content = content.split("\n").join(" ");
-
-            const content_elem = document.createElement("div");
-            content_elem.className = "content";
-            content_elem.textContent = content;
-            reply.appendChild(content_elem);
-        } else {
-            const content_elem = document.createElement("span");
-            content_elem.className = "not-loaded";
-            content_elem.textContent = "message not loaded";
-            reply.appendChild(content_elem);
-        }
-
-        elem.appendChild(reply);
+        elem.appendChild(generateReply(msg)!);
     }
 
     const container = document.createElement("div");
@@ -117,10 +85,23 @@ export function generate(id: string, connected?: boolean | string | null, intera
     user.textContent = getDisplayName(msg.user);
     column.appendChild(user);
 
-    const content = document.createElement("div");
-    content.className = "content";
-    generateContent(msg.content, content);
-    column.appendChild(content);
+    if (msg.content) {
+        const content = document.createElement("div");
+        content.className = "content";
+        generateContent(msg.content, content);
+        column.appendChild(content);
+    }
+
+    if (msg.attachments) {
+        const attachment_container = document.createElement("div");
+        attachment_container.className = "attachment-container";
+
+        for (let i = 0; i < msg.attachments.length; i++) {
+            attachment_container.appendChild(generateAttachment(msg.attachments[i]));
+        }
+
+        column.appendChild(attachment_container);
+    }
 
     container.appendChild(column);
 
@@ -146,8 +127,8 @@ export function generateContent(text: string, main_container: HTMLElement) {
     let links: string[] = [];
 
     function generateStatement(container: HTMLElement) {
-        if (/```(\w+)/.test(tokens[0])) {
-            const lang = tokens.shift()!.match(/```(\w+)/)![1];
+        if (/```(\w+)?/.test(tokens[0])) {
+            const lang = tokens.shift()!.match(/```(\w+)?/)![1] ?? "none";
 
             let content = "";
             if (tokens[0] as string == "\n")
@@ -396,14 +377,9 @@ export function generateContent(text: string, main_container: HTMLElement) {
                     const messages_container = document.getElementById("messages")!;
                     const at_bottom = isNearBottom(messages_container);
 
-                    const isImage = type.startsWith("image/");
-                    const isVideo = type.startsWith("video/") || type =="application/octet-stream";
-                    const isAudio =
-                        type.startsWith("audio/") ||
-                        type === "application/ogg" ||
-                        ["mp3", "wav", "ogg", "oga", "flac", "m4a", "aac"].includes(ext ?? "");
-                    
-                    if (isImage) {
+                    const identified_type = identifyType(type, ext);
+
+                    if (identified_type == "image") {
                         elem.innerHTML = "";
                         
                         const img = document.createElement("img");
@@ -413,7 +389,7 @@ export function generateContent(text: string, main_container: HTMLElement) {
                         img.src = url;
                         elem.appendChild(img);
                     }
-                    if (isVideo) {
+                    if (identified_type == "video") {
                         elem.innerHTML = "";
                         
                         const vid = document.createElement("video");
@@ -421,7 +397,7 @@ export function generateContent(text: string, main_container: HTMLElement) {
                         vid.src = url;
                         elem.appendChild(vid);
                     }
-                    if (isAudio) {
+                    if (identified_type == "audio") {
                         elem.innerHTML = "";
                         
                         const audio = document.createElement("audio");
@@ -515,3 +491,117 @@ export function generateContent(text: string, main_container: HTMLElement) {
     }
 }
 
+export function generateAttachment(attachment: Attachment): HTMLElement {
+    const type = identifyType(attachment.mime_type);
+
+    if (type == "image") {
+        const img = document.createElement("img");
+        img.addEventListener("click", () => {
+            openPopup(ImagePopup(attachment.url));
+        })
+        img.src = attachment.url;
+        return img;
+    }
+    if (type == "video") {
+        const vid = document.createElement("video");
+        vid.controls = true;
+        vid.src = attachment.url;
+        return vid;
+    }
+    if (type == "audio") {
+        const audio = document.createElement("audio");
+        audio.controls = true;
+        audio.src = attachment.url;
+        return audio;
+    }
+
+    const file = document.createElement("div");
+    file.className = "file";
+
+    file.appendChild(generateIcon("file"));
+    
+    const part = document.createElement("div");
+
+    const file_name = document.createElement("span");
+    file_name.className = "name";
+    file_name.textContent = attachment.name;
+    part.appendChild(file_name);
+    
+    const part2 = document.createElement("div");
+
+    const file_type = document.createElement("span");
+    file_type.className = "type";
+    file_type.textContent = attachment.mime_type;
+    part2.appendChild(file_type);
+
+    const file_size = document.createElement("span");
+    file_size.className = "size";
+    file_size.textContent = formatFileSize(attachment.size);
+    part2.appendChild(file_size);
+
+    part.appendChild(part2);
+
+    file.appendChild(part);
+
+    const download = document.createElement("button");
+    download.addEventListener("click", async () => {
+        const res = await fetch(attachment.url);
+        const blob = await res.blob();
+
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = attachment.name;
+        a.click();
+
+        URL.revokeObjectURL(url);
+    });
+    download.appendChild(generateIcon("download"));
+    file.appendChild(download);
+
+    return file;
+
+    //return document.createTextNode(":(") as unknown as HTMLElement;
+}
+
+export function generateReply(msg: Message): HTMLElement | undefined {
+    if (!msg.reply_to)
+        return
+
+    const reply = document.createElement("div");
+    reply.className = "reply";
+
+    reply.appendChild(generateIcon("corner-up-right"));
+
+    const pfp = document.createElement("img");
+    pfp.draggable = false;
+    pfp.src = `https://avatars.rotur.dev/${msg.reply_to.user.username}`;
+    reply.appendChild(pfp);
+
+    const name = document.createElement("span");
+    const name_color = getUserColor(msg.reply_to.user.username);
+    if (name_color)
+        name.style.color = name_color;
+    name.className = "user";
+    name.textContent = getDisplayName(msg.reply_to.user);
+    reply.appendChild(name);
+
+    if (messages[msg.reply_to.id]) {
+        // TODO: remove md shit :P
+        let content = messages[msg.reply_to.id].content;
+        content = content.split("\n").join(" ");
+
+        const content_elem = document.createElement("div");
+        content_elem.className = "content";
+        content_elem.textContent = content;
+        reply.appendChild(content_elem);
+    } else {
+        const content_elem = document.createElement("span");
+        content_elem.className = "not-loaded";
+        content_elem.textContent = "message not loaded";
+        reply.appendChild(content_elem);
+    }
+
+    return reply;
+}

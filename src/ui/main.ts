@@ -7,6 +7,7 @@ import * as user_list from "./user_list";
 import * as right_click from "./right_click";
 import * as reply_bar from "./reply_bar";
 import * as emoji_bar from "./emoji_bar";
+import * as server_panel from "./server_panel";
 
 right_click;
 reply_bar;
@@ -19,4 +20,5 @@ export function generate() {
     user_panel.generate();
     message_bar.generate();
     user_list.generate();
+    server_panel.generate();
 }

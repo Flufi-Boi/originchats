@@ -84,6 +84,71 @@
                     }
                 }
             }
+            > .attachment-container {
+                margin-top: 10px;
+                display: flex;
+
+                > img,
+                > video {
+                    max-width: 500px;
+                    max-height: 250px;
+
+                    border: 1px solid var(--prim);
+                    border-radius: 10px;
+
+                    cursor: pointer;
+                }
+                > .file {
+                    display: flex;
+                    padding: 10px;
+                    gap: 10px;
+                    align-items: center;
+
+                    background-color: var(--back-light);
+                    border: 1px solid var(--prim);
+                    border-radius: 10px;
+
+                    > icon {
+                        margin: 2px;
+                        > svg { width: 30px; height: 30px; }
+                    }
+
+                    > div {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 2px;
+
+                        > .name {
+                            font-size: var(--text-size-attachment-name);
+                        }
+
+                        > div {
+                            display: flex;
+                            gap: 5px;
+
+                            font-size: var(--text-size-attachment-other);
+                            color: var(--tert);
+                        }
+                    }
+
+                    > button {
+                        margin-left: 5px;
+                        padding: 5px;
+                        
+                        background: none;
+                        border: none;
+                        
+                        cursor: pointer;
+
+                        > icon > svg { width: 22px; }
+                    }
+                }
+            }
+        }
+        > .column:not(:has(.content)):has(.attachment-container) {
+            > .attachment-container {
+                margin-top: 0;
+            }
         }
     }
     

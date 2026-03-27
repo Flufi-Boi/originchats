@@ -11,6 +11,7 @@ export enum EventName {
     PopupChange,
     RightClickChange,
     UserListChange,
+    ServerPanelChange,
 
     NewMessage
 }

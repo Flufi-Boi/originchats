@@ -10,6 +10,7 @@ export const selectServer = (server: Server) => {
     events.invoke(events.EventName.MessagesChange);
     events.invoke(events.EventName.MessageBarChange);
     events.invoke(events.EventName.UserListChange);
+    events.invoke(events.EventName.ServerPanelChange);
 }
 export const deselectServer = () => {
     selectedServer = null;
@@ -18,4 +19,5 @@ export const deselectServer = () => {
     events.invoke(events.EventName.MessagesChange);
     events.invoke(events.EventName.MessageBarChange);
     events.invoke(events.EventName.UserListChange);
+    events.invoke(events.EventName.ServerPanelChange);
 }

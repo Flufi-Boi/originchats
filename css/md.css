@@ -5,8 +5,8 @@
 
     > p {
         margin: 0;
-        display: inline-flex;
-        align-items: center;
+        display: inline-block;
+        align-content: center;
 
         > bold {
             font-weight: bold;
@@ -24,8 +24,8 @@
         > div > video {
             max-width: 500px;
             max-height: 250px;
+            
             margin-left: -2px;
-
             margin-top: 7.5px;
 
             border: 1px solid var(--prim);
@@ -39,8 +39,8 @@
             margin: 5px 0;
         }
 
-        > .emoji {
-            margin-bottom: -5px;
+        > .emoji-container {
+            vertical-align: sub;
         }
 
         > .link {
@@ -49,13 +49,22 @@
 
         > .channel-link,
         > .ping {
-            background-color: var(--prim);
-            border: 1px solid var(--prim-light);
-            border-radius: 5px;
-            padding: 0px 2px;
+            padding: 1px 3px;
             margin: 2px 0;
+
+            display: inline-flex;
+
+            background-color: var(--prim);
+            border-radius: 5px;
+
             font-size: var(--text-size-normal);
-            display: flex;
+
+            transition: background-color .1s;
+        }
+        > .channel-link:hover,
+        > .ping:hover {
+            background-color: var(--prim-light);
+            cursor: pointer;
         }
     }
     > p:last-child {

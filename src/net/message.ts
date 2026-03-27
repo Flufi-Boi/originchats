@@ -1,3 +1,4 @@
+import type { Attachment } from "../attachment";
 
 export type NetMessage = {
     user: string,
@@ -9,5 +10,6 @@ export type NetMessage = {
     reply_to?: {
         id: string,
         user: string
-    }
+    },
+    attachments?: Attachment[],
 };

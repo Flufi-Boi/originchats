@@ -36,7 +36,7 @@ div.popup {
 }
 
 .emoji-container {
-    display: flex;
+    display: inline-flex;
 
     .emoji {
         width: 20px;
@@ -465,12 +465,28 @@ body:has(#emoji-bar:not(:empty)) #message-bar {
     justify-content: center;
 }
 
+#server-panel {
+    padding: 10px;
+
+    border-bottom: 1px solid var(--prim);
+
+    > p.not-logged-in,
+    > p.not-selected-server {
+        margin: 0;
+        width: 100%;
+
+        text-align: center;
+        color: var(--seco);
+    }
+}
+
 #user-list {
     width: 225px;
 
     display: flex;
     flex-direction: column;
     padding: 0 10px;
+    padding-top: 5px;
 
     background-color: var(--back-light);
     border-left: 1px solid var(--prim);

@@ -14,6 +14,7 @@ import "prismjs/components/prism-css";
 import "prismjs/components/prism-jsx";
 import "prismjs/components/prism-tsx";
 import "prismjs/components/prism-wasm";
+import "prismjs/components/prism-python";
 
 const lang_aliases: Record<string, string> = {
     ts: "typescript",
